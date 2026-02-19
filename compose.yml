@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: caddy:2
+    container_name: peticlicki-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./p8i_web/build:/usr/share/caddy:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
