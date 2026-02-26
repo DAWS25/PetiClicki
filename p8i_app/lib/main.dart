@@ -42,7 +42,17 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _getUserLocation() async {
     try {
-      final position = await GeolocatorPlatform.instance.getCurrentPosition();
+      // Request permission first
+      LocationPermission permission = await GeolocatorPlatform.instance.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await GeolocatorPlatform.instance.requestPermission();
+      }
+      
+      final position = await GeolocatorPlatform.instance.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
       setState(() {
         _center = LatLng(position.latitude, position.longitude);
         _loading = false;
@@ -57,16 +67,12 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('P8i Map'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : FlutterMap(
               options: MapOptions(
                 initialCenter: _center,
-                initialZoom: 13.0,
+                initialZoom: 18.0,
               ),
               children: [
                 TileLayer(

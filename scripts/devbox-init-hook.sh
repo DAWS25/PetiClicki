@@ -95,28 +95,7 @@ fi
 echo "Checking installed tools..."
 command -v aws &>/dev/null && aws --version || echo "aws CLI not found"
 command -v cdk &>/dev/null && cdk --version || echo "AWS CDK not found"
-command -v sam &>/dev/null && sam --version || echo "AWS SAM not found"
-command -v terraform &>/dev/null && terraform version || echo "Terraform not found"
-command -v java &>/dev/null && java --version || echo "Java not found"
-
-# SSH key setup
-SSH_KEY_PATH="$HOME/.ssh/id_rsa"
-if [ -f "$SSH_KEY_PATH" ]; then
-  echo "Using existing SSH key at $SSH_KEY_PATH"
-  chmod 600 "$SSH_KEY_PATH"
-fi
-
-# Check secrets
-SECRETS_DIR="$DIR/../../GitOps-Secrets"
-SECRETS_REPO="git@github.com:DAWS25/GitOps-Secrets.git"
-
-if [ ! -d "$SECRETS_DIR" ]; then
-  echo "Secrets directory not found: $SECRETS_DIR. Cloning..."
-  GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o BatchMode=yes" git clone "$SECRETS_REPO" "$SECRETS_DIR" 2>/dev/null || echo "[WARNING] Failed to clone secrets repository"
-else
-  echo "Secrets directory found: $SECRETS_DIR. Pulling..."
-  GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o BatchMode=yes" git -C "$SECRETS_DIR" pull origin main 2>/dev/null || echo "[WARNING] Failed to pull secrets repository"
-fi
+command -v flutter &>/dev/null && flutter --version || echo "flutter not found"
 
 
 #!

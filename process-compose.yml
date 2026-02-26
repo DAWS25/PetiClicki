@@ -2,6 +2,12 @@ version: "0.5"
 
 processes:
   p8i_app:
-    command: bash -c "cd p8i_app && flutter pub get && flutter run -d web-server --web-port=10277 --web-hostname=0.0.0.0"
+    command: ./scripts/start-p8i-app.sh
     availability:
-      restart: "on_failure"
+      restart: on_failure
+    readiness_probe:
+      http_get:
+        host: localhost
+        port: 8080
+      initial_delay_seconds: 10
+      period_seconds: 5
