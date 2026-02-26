@@ -1,0 +1,14 @@
+version: "0.5"
+
+processes:
+  p8i_app:
+    command: ./scripts/start-p8i-app.sh
+    working_dir: /home/vscode/src/daws25/PetiClicki
+    availability:
+      restart: on_failure
+    readiness_probe:
+      http_get:
+        host: localhost
+        port: 8080
+      initial_delay_seconds: 10
+      period_seconds: 5

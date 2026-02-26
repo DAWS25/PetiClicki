@@ -1,48 +1,7 @@
-version: "3.8"
+version: "0.5"
 
-services:
-  caddy:
-    image: caddy:2
-    container_name: peticlicki-caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./p8i_web/build:/usr/share/caddy:ro
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-    networks:
-      - web
-
-  localstack:
-    image: localstack/localstack:1.4
-    container_name: peticlicki-localstack
-    environment:
-      - SERVICES=s3,lambda,cloudformation,sts
-      - DEFAULT_REGION=us-east-1
-    ports:
-      - "4566:4566"
-    volumes:
-      - ./localstack:/var/lib/localstack
-    networks:
-      - web
-
-  db:
-    image: postgres:15
-    container_name: peticlicki-db
-    environment:
-      POSTGRES_DB: peticlicki
-      POSTGRES_USER: peticlicki
-      POSTGRES_PASSWORD: peticlicki
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - web
-
-networks:
-  web:
-    driver: bridge
-
-volumes:
-  db_data:
+processes:
+  p8i_app:
+    command: bash -c "cd p8i_app && flutter pub get && flutter run -d web-server --web-port=10277 --web-hostname=0.0.0.0"
+    availability:
+      restart: "on_failure"
