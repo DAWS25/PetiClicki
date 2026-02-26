@@ -1,4 +1,10 @@
 :80 {
+  # API proxy
+  handle /api/* {
+    reverse_proxy localhost:10274
+  }
+  
+  # Static files
   root * /usr/share/caddy
   file_server
 }

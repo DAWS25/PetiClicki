@@ -31,3 +31,5 @@ p8i_web/build/
 
 localstack
 
+# dart build
+build

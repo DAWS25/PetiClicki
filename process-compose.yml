@@ -2,7 +2,7 @@ version: "0.5"
 
 processes:
   p8i_app:
-    command: ./scripts/start-p8i-app.sh
+    command: ./scripts/app-start.sh
     availability:
       restart: on_failure
     readiness_probe:
@@ -10,4 +10,16 @@ processes:
         host: localhost
         port: 8080
       initial_delay_seconds: 10
+      period_seconds: 5
+
+  p8i_api:
+    command: ./scripts/api-start.sh
+    availability:
+      restart: on_failure
+    readiness_probe:
+      http_get:
+        host: localhost
+        port: 10274
+        path: /api/pois
+      initial_delay_seconds: 5
       period_seconds: 5
