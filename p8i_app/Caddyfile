@@ -1,0 +1,31 @@
+:10080 {
+    root * /srv
+    file_server
+    try_files {path} /index.html
+    
+    encode gzip
+    
+    header {
+        # Security headers
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "no-referrer-when-downgrade"
+    }
+}
+
+https://localhost:10443 {
+    root * /srv
+    file_server
+    try_files {path} /index.html
+    
+    encode gzip
+    
+    tls /certs/cert.pem /certs/key.pem
+    
+    header {
+        # Security headers
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "no-referrer-when-downgrade"
+    }
+}

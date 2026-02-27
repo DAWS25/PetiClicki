@@ -1,0 +1,31 @@
+# Build: docker build -t p8i-app -f Containerfile .
+# Run: docker run -p 10080:10080 -p 10443:10443 p8i-app
+
+# Stage 1: Build Flutter web app
+FROM ghcr.io/cirruslabs/flutter:stable AS builder
+
+WORKDIR /app
+
+# Copy pubspec files and get dependencies
+COPY pubspec.yaml pubspec.lock ./
+RUN flutter pub get
+
+# Copy the rest of the app
+COPY . .
+
+# Build for web production
+RUN flutter build web --release
+
+# Stage 2: Serve with Caddy
+FROM caddy:2-alpine
+
+# Copy built web app from builder
+COPY --from=builder /app/build/web /srv
+
+# Copy Caddyfile and certificates
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY certs /certs
+
+EXPOSE 10080 10443
+
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

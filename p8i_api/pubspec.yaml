@@ -1,0 +1,14 @@
+name: p8i_api
+description: P8i Points of Interest API
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  shelf: ^1.4.0
+  shelf_router: ^1.1.0
+
+dev_dependencies:
+  lints: ^5.0.0
